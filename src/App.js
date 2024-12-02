@@ -35,8 +35,29 @@ const App = () => {
         }
     }
 
-    const analyzeImage = async (e) => {
-
+    const analyzeImage = async () => {
+        setResponse("")
+        if (!image) {
+            setError("Error! Must have an existing image!")
+            return
+        }
+        try {
+            const options = {
+                method: "POST",
+                body: JSON.stringify({
+                    message: value,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+            const response = await fetch("http://localhost:8000/openai", options)
+            const text = await response.text()
+            setResponse(text)
+        } catch (err) {
+            console.log(err)
+            setError("Something didn't work! Please try again!")
+        }
     }
 
     const clear = () => {
